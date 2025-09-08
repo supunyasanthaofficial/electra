@@ -14,10 +14,18 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarStyle: { backgroundColor: "#fff" },
-        tabBarActiveTintColor: "#000",
-        tabBarInactiveTintColor: "#ccc",
-        headerShown: true,
+        // Dark tab bar to match screens
+        tabBarStyle: {
+          backgroundColor: "#0A0D1A",
+          borderTopWidth: 0,
+        },
+        tabBarActiveTintColor: "#6C5CE7", // highlight color
+        tabBarInactiveTintColor: "#aaa",
+        headerStyle: {
+          backgroundColor: "#10183dff",
+          shadowColor: "transparent",
+        },
+        headerTintColor: "#ce3030ff",
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
@@ -26,7 +34,7 @@ const TabNavigator = () => {
           } else if (route.name === "Search") {
             iconName = focused ? "search" : "search-outline";
           } else if (route.name === "Library") {
-            iconName = focused ? "library" : "library-outline"; // NOTE: 'library' is not a valid Ionicons name
+            iconName = focused ? "musical-notes" : "musical-notes-outline";
           } else if (route.name === "Settings") {
             iconName = focused ? "settings" : "settings-outline";
           }
@@ -34,9 +42,9 @@ const TabNavigator = () => {
           return (
             <Animatable.View
               animation={focused ? "rubberBand" : "fadeIn"}
-              duration={500}
+              duration={600}
               easing="ease-in-out"
-              style={{ alignItems: "center" }}
+              style={{ alignItems: "center", justifyContent: "center" }}
             >
               <Ionicons name={iconName} size={size} color={color} />
             </Animatable.View>
@@ -45,7 +53,7 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Search" component={SearchScreen} />
+      {/* <Tab.Screen name="Search" component={SearchScreen} /> */}
       <Tab.Screen name="Library" component={LibraryScreen} />
       <Tab.Screen name="Settings" component={SettingScreen} />
     </Tab.Navigator>
