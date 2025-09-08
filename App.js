@@ -6,11 +6,13 @@ import WelcomeScreen from "./screens/WelcomeScreen";
 import LoginScreen from "./screens/LoginScreen";
 
 import TabNavigator from "./navigation/TabNavigator";
+import PlayerScreen from "./screens/PlayerScreen";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
+    // <PlayerProvider>
     <NavigationContainer>
       <StatusBar style="light" />
       <Stack.Navigator
@@ -20,7 +22,9 @@ export default function App() {
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={TabNavigator} />
+        <Stack.Screen name="Player" component={PlayerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+    // {/* </PlayerProvider> */}
   );
 }
