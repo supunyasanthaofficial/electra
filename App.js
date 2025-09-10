@@ -12,7 +12,6 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    // <PlayerProvider>
     <NavigationContainer>
       <StatusBar style="light" />
       <Stack.Navigator
@@ -22,9 +21,12 @@ export default function App() {
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={TabNavigator} />
-        <Stack.Screen name="Player" component={PlayerScreen} />
+        <Stack.Screen
+          name="Player"
+          component={PlayerScreen}
+          screenOptions={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
-    // {/* </PlayerProvider> */}
   );
 }
