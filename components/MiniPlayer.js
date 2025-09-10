@@ -6,7 +6,7 @@ export default function MiniPlayer({
   isPlaying,
   onToggle,
   onOpen,
-  onClose, // ✅ new prop
+  onClose,
 }) {
   if (!current) return null;
   const coverSource = current.cover ? current.cover : { uri: current.coverUri };
