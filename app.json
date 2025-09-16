@@ -1,7 +1,21 @@
 {
   "expo": {
-    "name": "electra",
-    "slug": "electra",
-    "version": "1.0.0"
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification.png",
+          "color": "#6C5CE7"
+        }
+      ]
+    ],
+    "android": {
+      "useNextNotificationsApi": true,
+      "permissions": ["RECORD_AUDIO", "FOREGROUND_SERVICE"]
+    },
+    "ios": {
+      "supportsBackgroundAudio": true,
+      "requireFullScreen": false
+    }
   }
 }
