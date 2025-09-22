@@ -9,23 +9,18 @@ import {
   Switch,
   Dimensions,
   ScrollView,
+  Linking,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+import { useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
 
 export default function SettingsScreen() {
-  const [isDarkMode, setIsDarkMode] = useState(true);
-  const [playbackQuality, setPlaybackQuality] = useState("Medium");
-
-  // Animations
+  const navigation = useNavigation(); // Fixed typo from useNavigaton
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const floatAnim = useRef(new Animated.Value(0)).current;
-  const bars = useMemo(
-    () => new Array(3).fill(0).map(() => new Animated.Value(0)),
-    []
-  );
 
   useEffect(() => {
     Animated.loop(
@@ -60,38 +55,28 @@ export default function SettingsScreen() {
       ])
     ).start();
 
-    const makeBarAnim = (av, delay) =>
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(av, {
-            toValue: 1,
-            duration: 500,
-            delay,
-            easing: Easing.inOut(Easing.cubic),
-            useNativeDriver: false,
-          }),
-          Animated.timing(av, {
-            toValue: 0,
-            duration: 500,
-            easing: Easing.inOut(Easing.cubic),
-            useNativeDriver: false,
-          }),
-        ])
-      );
-
-    bars.forEach((av, i) => makeBarAnim(av, i * 100).start());
-
     return () => {
       pulseAnim.stopAnimation();
       floatAnim.stopAnimation();
-      bars.forEach((b) => b.stopAnimation());
     };
-  }, [bars, floatAnim, pulseAnim]);
+  }, [floatAnim, pulseAnim]);
 
   const noteTranslate = floatAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [0, -12],
   });
+
+  const openPrivacyPolicy = () => {
+    navigation.navigate("PrivacyPolicy");
+  };
+
+  const openTermsAndConditions = () => {
+    navigation.navigate("TermsAndConditions");
+  };
+
+  const contactSupport = () => {
+    navigation.navigate("ContactSupport");
+  };
 
   return (
     <ScrollView
@@ -102,7 +87,6 @@ export default function SettingsScreen() {
       <View style={styles.glowLarge} />
       <View style={styles.glowSmall} />
 
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.title}>⚙️ Settings</Text>
         <Animated.Text
@@ -112,68 +96,42 @@ export default function SettingsScreen() {
         </Animated.Text>
       </View>
 
-      {/* GENERAL */}
-      <Text style={styles.sectionTitle}>General</Text>
+      <Text style={styles.sectionTitle}>About</Text>
       <View style={styles.card}>
         <View style={styles.settingRow}>
-          <Ionicons name="moon" size={22} color="#6C5CE7" />
-          <Text style={styles.settingLabel}>Dark Mode</Text>
-          <Switch
-            value={isDarkMode}
-            onValueChange={setIsDarkMode}
-            trackColor={{ false: "#555", true: "#6C5CE7" }}
-            thumbColor={isDarkMode ? "#fff" : "#ccc"}
-          />
+          <Ionicons name="information-circle" size={22} color="#6C5CE7" />
+          <Text style={styles.settingLabel}>App Version</Text>
+          <Text style={styles.versionText}>1.2.0</Text>
         </View>
       </View>
 
-      {/* PLAYBACK */}
-      <Text style={styles.sectionTitle}>Playback</Text>
+      <Text style={styles.sectionTitle}>Legal</Text>
       <View style={styles.card}>
-        <View style={styles.settingRow}>
-          <Ionicons name="volume-high" size={22} color="#6C5CE7" />
-          <Text style={styles.settingLabel}>Volume Level</Text>
-          <View style={styles.volRow}>
-            {bars.map((av, i) => {
-              const h = av.interpolate({
-                inputRange: [0, 1],
-                outputRange: [10, 28 + (i % 2) * 6],
-              });
-              return (
-                <Animated.View key={i} style={[styles.volBar, { height: h }]} />
-              );
-            })}
-          </View>
-        </View>
+        <Pressable style={styles.settingRow} onPress={openPrivacyPolicy}>
+          <Ionicons name="document-text" size={22} color="#6C5CE7" />
+          <Text style={styles.settingLabel}>Privacy Policy</Text>
+          <Ionicons name="chevron-forward" size={20} color="#6C5CE7" />
+        </Pressable>
 
-        <View style={[styles.settingRow, { marginTop: 18 }]}>
-          <Ionicons name="speedometer" size={22} color="#6C5CE7" />
-          <Text style={styles.settingLabel}>Playback Quality</Text>
-          <View style={styles.qualityOptions}>
-            {["Low", "Medium", "High"].map((quality) => (
-              <Pressable
-                key={quality}
-                style={[
-                  styles.qualityButton,
-                  playbackQuality === quality && styles.qualityButtonActive,
-                ]}
-                onPress={() => setPlaybackQuality(quality)}
-              >
-                <Text
-                  style={[
-                    styles.qualityText,
-                    playbackQuality === quality && styles.qualityTextActive,
-                  ]}
-                >
-                  {quality}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        </View>
+        <Pressable
+          style={[styles.settingRow, { marginTop: 18 }]}
+          onPress={openTermsAndConditions}
+        >
+          <Ionicons name="document-text" size={22} color="#6C5CE7" />
+          <Text style={styles.settingLabel}>Terms & Conditions</Text>
+          <Ionicons name="chevron-forward" size={20} color="#6C5CE7" />
+        </Pressable>
       </View>
 
-      {/* FOOTER */}
+      <Text style={styles.sectionTitle}>Support</Text>
+      <View style={styles.card}>
+        <Pressable style={styles.settingRow} onPress={contactSupport}>
+          <Ionicons name="mail" size={22} color="#6C5CE7" />
+          <Text style={styles.settingLabel}>Contact Support</Text>
+          <Ionicons name="chevron-forward" size={20} color="#6C5CE7" />
+        </Pressable>
+      </View>
+
       <View style={styles.footer}>
         <Text style={styles.footerText}>
           🎵 Customize your Electra experience
@@ -254,37 +212,10 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 12,
   },
-  volRow: {
-    flexDirection: "row",
-    alignItems: "flex-end",
-    gap: 6,
-    height: 40,
-  },
-  volBar: {
-    width: 10,
-    backgroundColor: "#6C5CE7",
-    borderRadius: 6,
-  },
-  qualityOptions: {
-    flexDirection: "row",
-    gap: 8,
-  },
-  qualityButton: {
-    backgroundColor: "#1C2240",
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderRadius: 20,
-  },
-  qualityButtonActive: {
-    backgroundColor: "#6C5CE7",
-  },
-  qualityText: {
+  versionText: {
     color: "rgba(255,255,255,0.7)",
     fontSize: 14,
     fontWeight: "600",
-  },
-  qualityTextActive: {
-    color: "#fff",
   },
   footer: {
     marginTop: 30,
