@@ -8,6 +8,10 @@ import LoginScreen from "./screens/LoginScreen";
 import TabNavigator from "./navigation/TabNavigator";
 import PlayerScreen from "./screens/PlayerScreen";
 
+import ContactSupport from "./screens/ContactSupport";
+import PrivacyPolicy from "./screens/PrivacyPolicy";
+import TermsAnddCondition from "./screens/TermsAnddCondition";
+
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -25,6 +29,12 @@ export default function App() {
           name="Player"
           component={PlayerScreen}
           screenOptions={{ headerShown: false }}
+        />
+        <Stack.Screen name="ContactSupport" component={ContactSupport} />
+        <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+        <Stack.Screen
+          name="TermsAndConditions"
+          component={TermsAnddCondition}
         />
       </Stack.Navigator>
     </NavigationContainer>
