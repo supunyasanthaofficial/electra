@@ -9,30 +9,25 @@ import {
   Dimensions,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { useNavigation } from "@react-navigation/native"; // 👈 add this
+import { useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
 
 export default function WelcomeScreen() {
-  const navigation = useNavigation(); // 👈 hook for navigation
+  const navigation = useNavigation();
 
-  // Spin the vinyl
   const spinAnim = useRef(new Animated.Value(0)).current;
 
-  // Floating note
   const floatAnim = useRef(new Animated.Value(0)).current;
 
-  // CTA pulse
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
-  // Equalizer bars
   const bars = useMemo(
     () => new Array(5).fill(0).map(() => new Animated.Value(0)),
     []
   );
 
   useEffect(() => {
-    // Vinyl spin (infinite)
     Animated.loop(
       Animated.timing(spinAnim, {
         toValue: 1,
@@ -42,7 +37,6 @@ export default function WelcomeScreen() {
       })
     ).start();
 
-    // Floating note (up/down)
     Animated.loop(
       Animated.sequence([
         Animated.timing(floatAnim, {
@@ -60,7 +54,6 @@ export default function WelcomeScreen() {
       ])
     ).start();
 
-    // CTA pulse
     Animated.loop(
       Animated.sequence([
         Animated.timing(pulseAnim, {
@@ -76,7 +69,6 @@ export default function WelcomeScreen() {
       ])
     ).start();
 
-    // Equalizer bars animate with slight offsets
     const makeBarAnim = (av, delay) =>
       Animated.loop(
         Animated.sequence([
@@ -120,17 +112,14 @@ export default function WelcomeScreen() {
     <View style={styles.container}>
       <StatusBar style="light" />
 
-      {/* Glow background */}
       <View style={styles.glowLarge} />
       <View style={styles.glowSmall} />
 
-      {/* Title */}
       <View style={styles.header}>
         <Text style={styles.appName}>Electra</Text>
         <Text style={styles.tagline}>Feel the beat. Play your world.</Text>
       </View>
 
-      {/* Spinning vinyl */}
       <Animated.View
         style={[styles.vinylWrap, { transform: [{ rotate: spin }] }]}
       >
@@ -143,14 +132,12 @@ export default function WelcomeScreen() {
         </View>
       </Animated.View>
 
-      {/* Floating music note */}
       <Animated.Text
         style={[styles.note, { transform: [{ translateY: noteTranslate }] }]}
       >
         ♪
       </Animated.Text>
 
-      {/* Equalizer */}
       <View style={styles.eqRow}>
         {bars.map((av, i) => {
           const h = av.interpolate({
@@ -163,25 +150,21 @@ export default function WelcomeScreen() {
         })}
       </View>
 
-      {/* CTA Button */}
       <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
         <Pressable
           style={({ pressed }) => [styles.cta, pressed && { opacity: 0.9 }]}
-          onPress={() => navigation.navigate("Login")} // 👈 navigate to Home
+          onPress={() => navigation.navigate("Login")}
         >
           <Text style={styles.ctaText}>Get Started</Text>
         </Pressable>
       </Animated.View>
 
-      {/* Footer hint */}
       <Text style={styles.hint}>Tip: Press the button to continue</Text>
     </View>
   );
 }
 
 const DISC_SIZE = Math.min(width * 0.72, 320);
-
-// Styles remain the same ...
 
 const styles = StyleSheet.create({
   container: {
@@ -302,7 +285,7 @@ const styles = StyleSheet.create({
     borderRadius: 130,
     backgroundColor: "#6C5CE7",
     opacity: 0.2,
-    filter: "blur(40px)", // harmless on native; ignored
+    filter: "blur(40px)",
   },
   glowSmall: {
     position: "absolute",
